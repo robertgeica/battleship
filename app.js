@@ -29,12 +29,12 @@ const gameState = {
   playerTurn: false,
 };
 
-// init player board
+// init player board and ships
 const playerBoard = cloneObject(initialGameBoardTemplate);
+const playerShips = cloneObject(initialShipsTemplate);
 
 // render game grid board
 const renderGameBoard = (board) => {
-  // get board container and clear html content
   const boardDOM = document.getElementById("board");
   boardDOM.innerHTML = "";
 
@@ -59,3 +59,21 @@ const renderGameBoard = (board) => {
   boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM;
 };
 renderGameBoard(playerBoard);
+
+
+const renderShips = (ships) => {
+  const shipsContainerDOM = document.getElementById("ships");
+  shipsContainerDOM.innerHTML = "";
+
+  let shipsDOM;
+
+  for (let ship in ships) {
+    let shipCells;
+    for (let i = 1; i <= ships[ship].cells; i++) {
+      shipCells += `<div class="ship-cell">${i}</div>`;
+    }
+    shipsDOM += `<div class="ship" data-cells=${ships[ship].cells} data-name=${ships[ship].name} draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
+  }
+  shipsContainerDOM.innerHTML += shipsContainerDOM.innerHTML + shipsDOM;
+};
+renderShips(playerShips);
