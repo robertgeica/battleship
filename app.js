@@ -48,7 +48,9 @@ const renderGameBoard = (board) => {
 
     const cells = row.map(
       (cell, cellIndex) =>
-        `<div id="${rowIndex}${cellIndex}" class="cell ${hasShip(cell) ? "ship-cell" : ""} ${
+        `<div id="${rowIndex}${cellIndex}" class="cell ${
+          hasShip(cell) ? "ship-cell" : ""
+        } ${
           hasHittedShip(cell) ? "hit" : "not-hit"
         }" onclick="onCellClick(this)">${
           hasShip(cell) ? "ship" : ""
@@ -95,7 +97,7 @@ const onCellClick = (cell) => {
 
   renderComputerBoard(computerBoard);
   gameState.playerTurn = false;
-  // TODO: must call a function for computer hit
+  computerHit();
 };
 
 const placeShip = (ship, rowIndex, cellIndex) => {
@@ -122,14 +124,7 @@ const placeShip = (ship, rowIndex, cellIndex) => {
       // if no more ships, start game
       gameState.placeShips = false;
       gameState.playerTurn = true;
-      playerReady();
     }
-  }
-};
-
-const playerReady = () => {
-  if (gameState.playerTurn) {
-    console.log("my turn");
   }
 };
 
@@ -203,3 +198,19 @@ const placeComputerShips = (computerBoard) => {
 };
 
 placeComputerShips(computerBoard);
+
+
+const computerHit = () => {
+  const rowIndex = Math.floor(Math.random() * 10);;
+  const cellIndex = Math.floor(Math.random() * 10);;
+  const hittedCell = playerBoard[rowIndex][cellIndex];
+
+  if (hittedCell.ship) {
+    playerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
+  } else {
+    console.log(`computer miss ${rowIndex}${cellIndex}`)
+  }
+
+  gameState.playerTurn = true;
+  renderGameBoard(playerBoard);
+};
