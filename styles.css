@@ -1,29 +1,33 @@
 #board {
-  padding: 2em;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .row {
-  border: 1px solid blue;
   display: flex;
   flex-direction: row;
+  max-width: 30em;
 }
 
 .cell {
-  padding: 1em;
-  border: 1px solid green;
+  border: 1px solid #6686f1;
+  height: 3em;
+  width: 3em;
 }
+
 #ships {
-  padding: 2em;
-  border: 1px solid rebeccapurple;
+  /* padding: 2em; */
+  margin-top: 1em;
 }
 
 .ship {
   display: flex;
+  flex-direction: row;
+  max-width: 30em;
 }
 .ship-cell {
-  border: 1px solid grey;
-  padding: 1em;
+  border: 1px solid #003afa;
+  height: 3em;
+  width: 3em;
 }
 
 .hit {
