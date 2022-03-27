@@ -1,5 +1,5 @@
 // utils functions
-const cloneObject = object => JSON.parse(JSON.stringify(object));
+const cloneObject = (object) => JSON.parse(JSON.stringify(object));
 
 // board and ships template
 const initialGameBoardTemplate = [
@@ -29,3 +29,33 @@ const gameState = {
   playerTurn: false,
 };
 
+// init player board
+const playerBoard = cloneObject(initialGameBoardTemplate);
+
+// render game grid board
+const renderGameBoard = (board) => {
+  // get board container and clear html content
+  const boardDOM = document.getElementById("board");
+  boardDOM.innerHTML = "";
+
+  const rowsDOM = board.map((row, rowIndex) => {
+    const hasShip = (cell) => cell.ship === true;
+    const hasHittedShip = (cell) => cell.hit === true;
+
+    const cells = row.map(
+      (cell, cellIndex) =>
+        `<div id="${rowIndex}${cellIndex}" class="cell ${
+          hasHittedShip(cell) ? "hit" : "not-hit"
+        }" onclick="onCellClick(this)">${hasShip(
+          cell
+        )} ${rowIndex} ${cellIndex}</div>`
+    );
+    const rowDOM = `<div class="row" ondrop="drop(event)" ondragover="allowDrop(event)">${cells.join(
+      "\n"
+    )}</div>`;
+
+    return rowDOM;
+  });
+  boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM;
+};
+renderGameBoard(playerBoard);
