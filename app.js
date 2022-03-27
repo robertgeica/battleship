@@ -48,7 +48,7 @@ const renderGameBoard = (board) => {
 
     const cells = row.map(
       (cell, cellIndex) =>
-        `<div id="${rowIndex}${cellIndex}" class="cell ${
+        `<div id="${rowIndex}${cellIndex}" class="cell ${hasShip(cell) ? "ship-cell" : ""} ${
           hasHittedShip(cell) ? "hit" : "not-hit"
         }" onclick="onCellClick(this)">${
           hasShip(cell) ? "ship" : ""
