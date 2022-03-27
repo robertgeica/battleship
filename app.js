@@ -33,6 +33,10 @@ const gameState = {
 const playerBoard = cloneObject(initialGameBoardTemplate);
 const playerShips = cloneObject(initialShipsTemplate);
 
+// init computer board and ships
+const computerBoard = cloneObject(initialGameBoardTemplate);
+const computerShips = cloneObject(initialShipsTemplate);
+
 // render game grid board
 const renderGameBoard = (board) => {
   const boardDOM = document.getElementById("board");
@@ -77,3 +81,21 @@ const renderShips = (ships) => {
   shipsContainerDOM.innerHTML += shipsContainerDOM.innerHTML + shipsDOM;
 };
 renderShips(playerShips);
+
+
+const onCellClick = (cell) => {
+  if (!gameState.playerTurn) return console.log("wait for your turn");
+  const rowIndex = cell.id[0];
+  const cellIndex = cell.id[1];
+  const clickedCell = computerBoard[rowIndex][cellIndex];
+
+  if (clickedCell.ship) {
+    computerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
+  } else {
+    // upadte an object to display a blue cell or something on hit miss
+  }
+
+  // must render computer board here
+  gameState.playerTurn = false;
+  // must call a function for computer hit
+};
