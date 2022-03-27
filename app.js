@@ -19,7 +19,7 @@ const initialShipsTemplate = [
   // { name: "carrier", cells: 5 },
   // { name: "battleship", cells: 4 },
   // { name: "destroyer", cells: 3 },
-  // { name: "submarine", cells: 3 },
+  { name: "submarine", cells: 3 },
   { name: "patrol", cells: 2 },
 ];
 
@@ -30,7 +30,7 @@ const gameState = {
 };
 
 // init player board and ships
-const playerBoard = cloneObject(initialGameBoardTemplate);
+let playerBoard = cloneObject(initialGameBoardTemplate);
 let playerShips = cloneObject(initialShipsTemplate);
 
 // init computer board and ships
@@ -106,18 +106,27 @@ const placeShip = (ship, rowIndex, cellIndex) => {
   console.log(
     `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
   );
-
   if (shipCells + cellIndex > 10) {
     console.log("not enought space to place ship here");
   } else {
-    // place object on every cell
-    // TODO:  check if there's already a ship there
+    
+    let discard = false;
     for (let i = cellIndex; i < shipCells + cellIndex; i++) {
-      playerBoard[rowIndex][i] = { ship: true, hit: false };
+
+      const playerBoardCopy = cloneObject(playerBoard);
+      if(!playerBoardCopy[rowIndex][i].ship) {
+        playerBoardCopy[rowIndex][i] = { ship: true, hit: false };
+      } else {
+        discard = true;
+      }
+
+      if(!discard) {
+        playerBoard = playerBoardCopy;
+        playerShips = playerShips.filter((ship) => ship.name !== shipName);
+      }
     }
 
     // remove placed ship from player ships array
-    playerShips = playerShips.filter((ship) => ship.name !== shipName);
     renderGameBoard(playerBoard);
     renderShips(playerShips);
 
