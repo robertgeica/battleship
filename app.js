@@ -99,3 +99,38 @@ const onCellClick = (cell) => {
   gameState.playerTurn = false;
   // must call a function for computer hit
 };
+
+
+const placeShip = (ship, rowIndex, cellIndex) => {
+  const { shipName, shipCells } = ship;
+  console.log(
+    `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
+  );
+
+  if (shipCells + cellIndex > 10) {
+    console.log("not enought space to place ship here");
+  } else {
+    // place object on every cell
+    for (let i = cellIndex; i < shipCells + cellIndex; i++) {
+      playerBoard[rowIndex][i] = { ship: true, hit: false };
+    }
+
+    // remove placed ship from player ships array
+    playerShips = playerShips.filter((ship) => ship.name !== shipName);
+    renderGameBoard(playerBoard);
+    renderShips(playerShips);
+
+    if (playerShips.length === 0) {
+      // if no more ships, start game
+      gameState.placeShips = false;
+      gameState.playerTurn = true;
+      playerReady();
+    }
+  }
+};
+
+const playerReady = () => {
+  if (gameState.playerTurn) {
+    console.log("my turn");
+  }
+};
