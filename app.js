@@ -152,4 +152,33 @@ const drop = (e) => {
   placeShip({ shipCells, shipName }, row, cell);
 };
 
-// TODO: generate and render computer board and ships
+// TODO: add renderComputerBoard()
+
+const placeComputerShips = (computerBoard) => {
+  const computerShips = JSON.parse(JSON.stringify(initialShipsTemplate));
+  const randomRowIndex = Math.floor(Math.random() * 10);
+  const randomCellIndex = Math.floor(Math.random() * 10);
+
+  for (let i = 0; i < computerShips.length; i++) {
+    const randomRowIndex = Math.floor(Math.random() * 10);
+    let randomCellIndex = Math.floor(Math.random() * 10);
+    const shipCells = computerShips[i].cells;
+
+    while (shipCells + randomCellIndex > 10) {
+      randomCellIndex = Math.floor(Math.random() * 10);
+    }
+
+    for (let i = randomCellIndex; i < shipCells + randomCellIndex; i++) {
+      if (computerBoard[randomRowIndex][i].ship) {
+        console.log("ship already exist");
+      } else {
+        // FIXME: check all board cells before placing a ship cell
+        computerBoard[randomRowIndex][i] = { ship: true, hit: false };
+      }
+    }
+  }
+
+  console.log(computerBoard);
+};
+
+placeComputerShips(computerBoard);
