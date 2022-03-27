@@ -31,7 +31,7 @@ const gameState = {
 
 // init player board and ships
 const playerBoard = cloneObject(initialGameBoardTemplate);
-const playerShips = cloneObject(initialShipsTemplate);
+let playerShips = cloneObject(initialShipsTemplate);
 
 // init computer board and ships
 const computerBoard = cloneObject(initialGameBoardTemplate);
@@ -92,12 +92,12 @@ const onCellClick = (cell) => {
   if (clickedCell.ship) {
     computerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
-    // upadte an object to display a blue cell or something on hit miss
+    // TODO: upadte an object to display a blue cell or something on hit miss
   }
 
-  // must render computer board here
+  // TODO: render computer board here
   gameState.playerTurn = false;
-  // must call a function for computer hit
+  // TODO: must call a function for computer hit
 };
 
 
@@ -111,6 +111,7 @@ const placeShip = (ship, rowIndex, cellIndex) => {
     console.log("not enought space to place ship here");
   } else {
     // place object on every cell
+    // TODO:  check if there's already a ship there
     for (let i = cellIndex; i < shipCells + cellIndex; i++) {
       playerBoard[rowIndex][i] = { ship: true, hit: false };
     }
@@ -134,3 +135,22 @@ const playerReady = () => {
     console.log("my turn");
   }
 };
+
+const allowDrop = e => e.preventDefault();
+
+const drag = e => {
+  const shipCells = e.target.dataset.cells;
+  const shipName = e.target.dataset.name;
+  e.dataTransfer.setData("shipCells", shipCells);
+  e.dataTransfer.setData("shipName", shipName);
+}
+
+const drop = e => {
+  e.preventDefault();
+  const shipCells = parseInt(e.dataTransfer.getData("shipCells"));
+  const shipName = e.dataTransfer.getData("shipName");
+  const row = parseInt(e.target.id[0]);
+  const cell = parseInt(e.target.id[1]);
+  
+  placeShip({ shipCells, shipName }, row, cell);
+}
