@@ -93,7 +93,6 @@ const onCellClick = (cell) => {
     // TODO: upadte an object to display a blue cell or something on hit miss
   }
 
- 
   renderComputerBoard(computerBoard);
   gameState.playerTurn = false;
   // TODO: must call a function for computer hit
@@ -153,7 +152,29 @@ const drop = (e) => {
   placeShip({ shipCells, shipName }, row, cell);
 };
 
-// TODO: add renderComputerBoard()
+// TODO: unduplicate this function
+const renderComputerBoard = (board) => {
+  const boardDOM = document.getElementById("computer-board");
+  boardDOM.innerHTML = "";
+
+  const rowsDOM = board.map((row, rowIndex) => {
+    const hasShip = (cell) => cell.ship === true;
+    const hasHittedShip = (cell) => cell.hit === true;
+
+    const cells = row.map(
+      (cell, cellIndex) =>
+        `<div id="${rowIndex}${cellIndex}" class="cell ${
+          hasHittedShip(cell) ? "hit" : "not-hit"
+        }" onclick="onCellClick(this)">${
+          hasShip(cell) ? "ship" : ""
+        } ${rowIndex} ${cellIndex}</div>`
+    );
+
+    return `<div class="row">${cells.join("\n")}</div>`;
+  });
+
+  boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM.join("\n");
+};
 
 const placeComputerShips = (computerBoard) => {
   const computerShips = JSON.parse(JSON.stringify(initialShipsTemplate));
@@ -178,34 +199,7 @@ const placeComputerShips = (computerBoard) => {
       }
     }
   }
-
-  console.log(computerBoard);
+  renderComputerBoard(computerBoard);
 };
 
 placeComputerShips(computerBoard);
-
-// TODO: unduplicate this function
-const renderComputerBoard = (board) => {
-  const boardDOM = document.getElementById("computer-board");
-  boardDOM.innerHTML = "";
-
-  const rowsDOM = board.map((row, rowIndex) => {
-    const hasShip = (cell) => cell.ship === true;
-    const hasHittedShip = (cell) => cell.hit === true;
-
-    const cells = row.map(
-      (cell, cellIndex) =>
-        `<div id="${rowIndex}${cellIndex}" class="cell ${
-          hasHittedShip(cell) ? "hit" : "not-hit"
-        }" onclick="onCellClick(this)">${
-          hasShip(cell) ? "ship" : ""
-        } ${rowIndex} ${cellIndex}</div>`
-    );
-
-    console.log(cells)
-    return `<div class="row">${cells.join("\n")}</div>`;
-  });
-
-  boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM.join("\n");
-};
-renderComputerBoard(computerBoard);
