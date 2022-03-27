@@ -13,3 +13,19 @@
   padding: 1em;
   border: 1px solid green;
 }
+#ships {
+  padding: 2em;
+  border: 1px solid rebeccapurple;
+}
+
+.ship {
+  display: flex;
+}
+.ship-cell {
+  border: 1px solid grey;
+  padding: 1em;
+}
+
+.hit {
+  background-color: red;
+}
