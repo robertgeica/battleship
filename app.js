@@ -16,10 +16,10 @@ const initialGameBoardTemplate = [
 ];
 
 const initialShipsTemplate = [
-  { name: "carrier", cells: 5 },
-  { name: "battleship", cells: 4 },
-  { name: "destroyer", cells: 3 },
-  { name: "submarine", cells: 3 },
+  // { name: "carrier", cells: 5 },
+  // { name: "battleship", cells: 4 },
+  // { name: "destroyer", cells: 3 },
+  // { name: "submarine", cells: 3 },
   { name: "patrol", cells: 2 },
 ];
 
@@ -93,7 +93,8 @@ const onCellClick = (cell) => {
     // TODO: upadte an object to display a blue cell or something on hit miss
   }
 
-  // TODO: render computer board here
+ 
+  renderComputerBoard(computerBoard);
   gameState.playerTurn = false;
   // TODO: must call a function for computer hit
 };
@@ -182,3 +183,29 @@ const placeComputerShips = (computerBoard) => {
 };
 
 placeComputerShips(computerBoard);
+
+// TODO: unduplicate this function
+const renderComputerBoard = (board) => {
+  const boardDOM = document.getElementById("computer-board");
+  boardDOM.innerHTML = "";
+
+  const rowsDOM = board.map((row, rowIndex) => {
+    const hasShip = (cell) => cell.ship === true;
+    const hasHittedShip = (cell) => cell.hit === true;
+
+    const cells = row.map(
+      (cell, cellIndex) =>
+        `<div id="${rowIndex}${cellIndex}" class="cell ${
+          hasHittedShip(cell) ? "hit" : "not-hit"
+        }" onclick="onCellClick(this)">${
+          hasShip(cell) ? "ship" : ""
+        } ${rowIndex} ${cellIndex}</div>`
+    );
+
+    console.log(cells)
+    return `<div class="row">${cells.join("\n")}</div>`;
+  });
+
+  boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM.join("\n");
+};
+renderComputerBoard(computerBoard);

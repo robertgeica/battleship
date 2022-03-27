@@ -1,11 +1,16 @@
+.boards {
+  display: flex;
+  flex-direction: row;
+}
 #board {
   /* border: 1px solid red; */
+  margin-right: 1em;
 }
 
 .row {
   display: flex;
   flex-direction: row;
-  max-width: 30em;
+  max-width: 25em;
 }
 
 .cell {
