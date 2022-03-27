@@ -208,7 +208,6 @@ const computerHit = () => {
   const rowIndex = Math.floor(Math.random() * 10);
   const cellIndex = Math.floor(Math.random() * 10);
   const hittedCell = playerBoard[rowIndex][cellIndex];
-  console.log(hittedCell)
   if (hittedCell.ship) {
     playerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
@@ -217,4 +216,20 @@ const computerHit = () => {
 
   gameState.playerTurn = true;
   renderGameBoard(playerBoard);
+  checkGameOver();
 };
+
+const checkGameOver = () => {
+  const totalShipCells = 2;
+  let computerHit = 0;
+  let playerHit = 0;
+  computerBoard.forEach(row => row.forEach(cell => cell.hit && playerHit++));
+  playerBoard.forEach(row => row.forEach(cell => cell.hit && computerHit++));
+  
+  if(playerHit === totalShipCells) return console.log('player won')
+  if(computerHit === totalShipCells) return console.log('computer won')
+}
+
+
+
+// TODO: add restart game
