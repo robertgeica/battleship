@@ -39,3 +39,7 @@
 .hit {
   background-color: red;
 }
+
+.miss {
+  background-color: grey;
+}
