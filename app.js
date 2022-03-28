@@ -17,9 +17,9 @@ const initialGameBoardTemplate = [
 
 const initialShipsTemplate = [
   // { name: "carrier", cells: 5 },
-  // { name: "battleship", cells: 4 },
+  { name: "battleship", cells: 4 },
   // { name: "destroyer", cells: 3 },
-  { name: "submarine", cells: 3 },
+  // { name: "submarine", cells: 3 },
   { name: "patrol", cells: 2 },
 ];
 
@@ -37,34 +37,45 @@ let playerShips = cloneObject(initialShipsTemplate);
 const computerBoard = cloneObject(initialGameBoardTemplate);
 const computerShips = cloneObject(initialShipsTemplate);
 
-// render game grid board
-const renderGameBoard = (board) => {
-  const boardDOM = document.getElementById("board");
+
+const renderGameBoard = (board, playerType) => {
+  const boardDOM = document.getElementById(`${playerType}-board`);
   boardDOM.innerHTML = "";
+
+  const isComputer = playerType === "computer";
+  const isPlayer = playerType === "player";
 
   const rowsDOM = board.map((row, rowIndex) => {
     const hasShip = (cell) => cell.ship === true;
     const hasHittedShip = (cell) => cell.hit === true;
     const hasMissedHit = (cell) => cell.miss === true;
 
-    const cells = row.map(
-      (cell, cellIndex) =>
-        `<div id="${rowIndex}${cellIndex}" class="cell ${
-          hasShip(cell) ? "ship-cell" : ""
-        } ${hasHittedShip(cell) ? "hit" : ""} ${
-          hasMissedHit(cell) ? "miss" : ""
-        }" onclick="onCellClick(this)">${
-          hasShip(cell) ? "ship" : ""
-        } ${rowIndex} ${cellIndex}</div>`
-    );
-    const rowDOM = `<div class="row" ondrop="drop(event)" ondragover="allowDrop(event)">
+    const cells = row.map((cell, cellIndex) => {
+      const hit = hasHittedShip(cell) ? "hit" : "";
+      const miss = hasMissedHit(cell) ? "miss" : "";
+      const shipCell = hasShip(cell) ? "ship-cell" : "";
+      return `
+        <div 
+          id="${rowIndex}${cellIndex}" 
+          class="cell ${hit} ${miss} ${shipCell}" 
+          onclick="onCellClick(this)"
+        >
+        ${rowIndex} ${cellIndex}
+        </div>
+      `;
+    });
+
+    // if player board allow drag and drop
+    if (isPlayer) 
+      return `<div class="row" ondrop="drop(event)" ondragover="allowDrop(event)">
     ${cells.join("\n")}</div>`;
-    return rowDOM;
+    
+    return `<div class="row">${cells.join("\n")}</div>`;
   });
 
   boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM.join("\n");
 };
-renderGameBoard(playerBoard);
+renderGameBoard(playerBoard, "player");
 
 const renderShips = (ships) => {
   const shipsContainerDOM = document.getElementById("ships");
@@ -96,7 +107,7 @@ const onCellClick = (cell) => {
     computerBoard[rowIndex][cellIndex] = { miss: true };
   }
 
-  renderComputerBoard(computerBoard);
+  renderGameBoard(computerBoard, "computer");
   gameState.playerTurn = false;
   computerHit();
 };
@@ -109,25 +120,23 @@ const placeShip = (ship, rowIndex, cellIndex) => {
   if (shipCells + cellIndex > 10) {
     console.log("not enought space to place ship here");
   } else {
-    
     let discard = false;
     for (let i = cellIndex; i < shipCells + cellIndex; i++) {
-
       const playerBoardCopy = cloneObject(playerBoard);
-      if(!playerBoardCopy[rowIndex][i].ship) {
+      if (!playerBoardCopy[rowIndex][i].ship) {
         playerBoardCopy[rowIndex][i] = { ship: true, hit: false };
       } else {
         discard = true;
       }
 
-      if(!discard) {
+      if (!discard) {
         playerBoard = playerBoardCopy;
         playerShips = playerShips.filter((ship) => ship.name !== shipName);
       }
     }
 
     // remove placed ship from player ships array
-    renderGameBoard(playerBoard);
+    renderGameBoard(playerBoard, "player");
     renderShips(playerShips);
 
     if (playerShips.length === 0) {
@@ -157,30 +166,7 @@ const drop = (e) => {
   placeShip({ shipCells, shipName }, row, cell);
 };
 
-// TODO: unduplicate this function
-const renderComputerBoard = (board) => {
-  const boardDOM = document.getElementById("computer-board");
-  boardDOM.innerHTML = "";
-
-  const rowsDOM = board.map((row, rowIndex) => {
-    const hasShip = (cell) => cell.ship === true;
-    const hasHittedShip = (cell) => cell.hit === true;
-    const hasMissedHit = (cell) => cell.miss === true;
-
-    const cells = row.map(
-      (cell, cellIndex) =>
-        `<div id="${rowIndex}${cellIndex}" class="cell ${
-          hasHittedShip(cell) ? "hit" : ""
-        } ${hasMissedHit(cell) ? "miss" : ""}" onclick="onCellClick(this)">${
-          hasShip(cell) ? "ship" : ""
-        } ${rowIndex} ${cellIndex}</div>`
-    );
-
-    return `<div class="row">${cells.join("\n")}</div>`;
-  });
-
-  boardDOM.innerHTML += boardDOM.innerHTML + rowsDOM.join("\n");
-};
+//
 
 const placeComputerShips = (computerBoard) => {
   const computerShips = JSON.parse(JSON.stringify(initialShipsTemplate));
@@ -208,7 +194,7 @@ const placeComputerShips = (computerBoard) => {
       }
     }
   }
-  renderComputerBoard(computerBoard);
+  renderGameBoard(computerBoard, "computer");
 };
 
 placeComputerShips(computerBoard);
@@ -220,11 +206,14 @@ const computerHit = () => {
   if (hittedCell.ship) {
     playerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
-    playerBoard[rowIndex][cellIndex] = { ...playerBoard[rowIndex][cellIndex], miss: true };
+    playerBoard[rowIndex][cellIndex] = {
+      ...playerBoard[rowIndex][cellIndex],
+      miss: true,
+    };
   }
 
   gameState.playerTurn = true;
-  renderGameBoard(playerBoard);
+  renderGameBoard(playerBoard, "player");
   checkGameOver();
 };
 
@@ -232,13 +221,16 @@ const checkGameOver = () => {
   const totalShipCells = 2;
   let computerHit = 0;
   let playerHit = 0;
-  computerBoard.forEach(row => row.forEach(cell => cell.hit && playerHit++));
-  playerBoard.forEach(row => row.forEach(cell => cell.hit && computerHit++));
-  
-  if(playerHit === totalShipCells) return console.log('player won')
-  if(computerHit === totalShipCells) return console.log('computer won')
-}
+  computerBoard.forEach((row) =>
+    row.forEach((cell) => cell.hit && playerHit++)
+  );
+  playerBoard.forEach((row) =>
+    row.forEach((cell) => cell.hit && computerHit++)
+  );
 
-
+  if (playerHit === totalShipCells) return console.log("player won");
+  if (computerHit === totalShipCells) return console.log("computer won");
+};
 
 // TODO: add restart game
+// TODO: refactor and clean code
