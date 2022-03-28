@@ -43,3 +43,14 @@
 .miss {
   background-color: grey;
 }
+
+.disable-click {
+  pointer-events:none;
+}
+
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}

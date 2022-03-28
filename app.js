@@ -17,7 +17,7 @@ const initialGameBoardTemplate = [
 
 const initialShipsTemplate = [
   // { name: "carrier", cells: 5 },
-  { name: "battleship", cells: 4 },
+  // { name: "battleship", cells: 4 },
   // { name: "destroyer", cells: 3 },
   // { name: "submarine", cells: 3 },
   { name: "patrol", cells: 2 },
@@ -36,7 +36,6 @@ let playerShips = cloneObject(initialShipsTemplate);
 // init computer board and ships
 const computerBoard = cloneObject(initialGameBoardTemplate);
 const computerShips = cloneObject(initialShipsTemplate);
-
 
 const renderGameBoard = (board, playerType) => {
   const boardDOM = document.getElementById(`${playerType}-board`);
@@ -66,10 +65,10 @@ const renderGameBoard = (board, playerType) => {
     });
 
     // if player board allow drag and drop
-    if (isPlayer) 
+    if (isPlayer)
       return `<div class="row" ondrop="drop(event)" ondragover="allowDrop(event)">
     ${cells.join("\n")}</div>`;
-    
+
     return `<div class="row">${cells.join("\n")}</div>`;
   });
 
@@ -218,9 +217,10 @@ const computerHit = () => {
 };
 
 const checkGameOver = () => {
-  const totalShipCells = 2;
+  let totalShipCells = 2;
   let computerHit = 0;
   let playerHit = 0;
+
   computerBoard.forEach((row) =>
     row.forEach((cell) => cell.hit && playerHit++)
   );
@@ -228,9 +228,29 @@ const checkGameOver = () => {
     row.forEach((cell) => cell.hit && computerHit++)
   );
 
-  if (playerHit === totalShipCells) return console.log("player won");
-  if (computerHit === totalShipCells) return console.log("computer won");
+  const playerWon = playerHit === totalShipCells;
+  const computerWon = computerHit === totalShipCells;
+
+  if (playerWon || computerWon) {
+    document.getElementById("player-board").classList = "disable-click";
+    document.getElementById("computer-board").classList = "disable-click";
+  }
+  if (playerWon) {
+    console.log("player won");
+    restartGame();
+  }
+  if (computerWon) {
+    console.log("computer won");
+    restartGame();
+  }
 };
 
+const restartGame = () => {
+  console.log("restart");
+  const restartBtn = document.getElementById("restart-btn");
+  restartBtn.classList.remove("hide");
+  restartBtn.classList.add("show");
+  restartBtn.addEventListener('click', () => window.location.reload());
+};
 // TODO: add restart game
 // TODO: refactor and clean code
