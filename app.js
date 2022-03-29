@@ -16,10 +16,10 @@ const initialGameBoardTemplate = [
 ];
 
 const initialShipsTemplate = [
-  // { name: "carrier", cells: 5 },
-  // { name: "battleship", cells: 4 },
-  // { name: "destroyer", cells: 3 },
-  // { name: "submarine", cells: 3 },
+  { name: "carrier", cells: 5 },
+  { name: "battleship", cells: 4 },
+  { name: "destroyer", cells: 3 },
+  { name: "submarine", cells: 3 },
   { name: "patrol", cells: 2 },
 ];
 
@@ -34,8 +34,8 @@ let playerBoard = cloneObject(initialGameBoardTemplate);
 let playerShips = cloneObject(initialShipsTemplate);
 
 // init computer board and ships
-const computerBoard = cloneObject(initialGameBoardTemplate);
-const computerShips = cloneObject(initialShipsTemplate);
+let computerBoard = cloneObject(initialGameBoardTemplate);
+let computerShips = cloneObject(initialShipsTemplate);
 
 const renderGameBoard = (board, playerType) => {
   const boardDOM = document.getElementById(`${playerType}-board`);
@@ -165,34 +165,54 @@ const drop = (e) => {
   placeShip({ shipCells, shipName }, row, cell);
 };
 
-//
-
 const placeComputerShips = (computerBoard) => {
-  const computerShips = JSON.parse(JSON.stringify(initialShipsTemplate));
-  const randomRowIndex = Math.floor(Math.random() * 10);
-  const randomCellIndex = Math.floor(Math.random() * 10);
+  let computerShipsClone = JSON.parse(JSON.stringify(computerShips));
+  let randomCellIndex = Math.floor(Math.random() * 10);
 
-  for (let i = 0; i < computerShips.length; i++) {
-    const randomRowIndex = Math.floor(Math.random() * 10);
-    let randomCellIndex = Math.floor(Math.random() * 10);
-    const shipCells = computerShips[i].cells;
+  function place() {
+    console.log(computerShipsClone.length, computerShips.length);
 
-    while (shipCells + randomCellIndex > 10) {
-      randomCellIndex = Math.floor(Math.random() * 10);
-    }
+    for (let i = 0; i < computerShips.length; i++) {
+      const randomRowIndex = Math.floor(Math.random() * 10);
+      const shipCells = computerShips[i].cells;
 
-    for (let i = randomCellIndex; i < shipCells + randomCellIndex; i++) {
-      if (computerBoard[randomRowIndex][i].ship) {
-        console.log("ship already exist");
+      while (shipCells + randomCellIndex > 10) {
+        randomCellIndex = Math.floor(Math.random() * 10);
+      }
+
+      let hasSpace = false;
+      let hasShip = false;
+
+      computerBoard[randomRowIndex].forEach((cell, index) => {
+        if (index >= randomCellIndex) {
+          let availableSpace = index + randomCellIndex;
+          hasSpace =
+            shipCells <= index + randomCellIndex ||
+            availableSpace === 0 ||
+            availableSpace === 1;
+
+          if (cell.ship) hasShip = true;
+        }
+      });
+
+      if (hasSpace && !hasShip) {
+        for (let j = randomCellIndex; j < shipCells + randomCellIndex; j++) {
+          computerBoard[randomRowIndex][j] = {
+            ship: true,
+            hit: false,
+          };
+        }
+        computerShipsClone = computerShipsClone.filter(
+          (ship) => ship.name !== computerShips[i].name
+        );
+        ships = ships - 1;
       } else {
-        // FIXME: check all board cells before placing a ship cell
-        computerBoard[randomRowIndex][i] = {
-          ship: true,
-          hit: false,
-        };
+        console.log("not enough space");
       }
     }
   }
+  place(); // TODO: re-run function if computerShipsClone still has ships
+
   renderGameBoard(computerBoard, "computer");
 };
 
@@ -250,7 +270,6 @@ const restartGame = () => {
   const restartBtn = document.getElementById("restart-btn");
   restartBtn.classList.remove("hide");
   restartBtn.classList.add("show");
-  restartBtn.addEventListener('click', () => window.location.reload());
+  restartBtn.addEventListener("click", () => window.location.reload());
 };
-// TODO: add restart game
-// TODO: refactor and clean code
+
