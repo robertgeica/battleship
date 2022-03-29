@@ -166,12 +166,9 @@ const drop = (e) => {
 };
 
 const placeComputerShips = (computerBoard) => {
-  let computerShipsClone = JSON.parse(JSON.stringify(computerShips));
   let randomCellIndex = Math.floor(Math.random() * 10);
 
-  function place() {
-    console.log(computerShipsClone.length, computerShips.length);
-
+  const place = () => {
     for (let i = 0; i < computerShips.length; i++) {
       const randomRowIndex = Math.floor(Math.random() * 10);
       const shipCells = computerShips[i].cells;
@@ -202,16 +199,17 @@ const placeComputerShips = (computerBoard) => {
             hit: false,
           };
         }
-        computerShipsClone = computerShipsClone.filter(
+        computerShips = computerShips.filter(
           (ship) => ship.name !== computerShips[i].name
         );
         ships = ships - 1;
-      } else {
-        console.log("not enough space");
       }
     }
+  };
+
+  while (computerShips.length !== 0) {
+    place();
   }
-  place(); // TODO: re-run function if computerShipsClone still has ships
 
   renderGameBoard(computerBoard, "computer");
 };
@@ -237,7 +235,7 @@ const computerHit = () => {
 };
 
 const checkGameOver = () => {
-  let totalShipCells = 2;
+  let totalShipCells = 17;
   let computerHit = 0;
   let playerHit = 0;
 
@@ -272,4 +270,3 @@ const restartGame = () => {
   restartBtn.classList.add("show");
   restartBtn.addEventListener("click", () => window.location.reload());
 };
-
