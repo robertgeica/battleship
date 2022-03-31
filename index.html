@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Battleship</title>
-  <link rel="stylesheet" href="./styles.css">
-</head>
-<body>
-  <button id="restart-btn" class="hide">restart</button>
-  <div class="boards">
-
-    <div id="player-board">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <button id="restart-btn" class="hide">restart</button>
+    <div id="boards" class="boards hide">
+      <div id="player-board"></div>
+      <div id="computer-board"></div>
     </div>
-    <div id="computer-board">
+    <div class="hide" id="ships"></div>
+
+    <div id="start-screen" onclick="startGame()">
+      <img
+        src="https://as2.ftcdn.net/v2/jpg/02/09/21/67/1000_F_209216736_LJi4I9OoBKyTIjjc5YlEinWUD22IxQY9.jpg"
+        width="700"
+        height="450"
+      />
+
+      <button id="start-btn">Start game</button>
     </div>
 
-  </div>
-  <div id="ships">
-  </div>
-
-
-  <script type="text/javascript" src="./app.js"></script>
-</body>
+    <script type="text/javascript" src="./app.js"></script>
+  </body>
 </html>

@@ -1,3 +1,29 @@
+#start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2em;
+}
+#start-btn {
+  text-align: center;
+  margin: 1em;
+  padding: 10px;
+  text-shadow: -1px -1px black, 1px 1px white;
+  color: #6b6b6b;
+  border-radius: 7px;
+  box-shadow: 0 0.2em #6b6b6b;
+  cursor: pointer;
+}
+#start-btn:hover {
+  background-color: rgb(224, 224, 224);
+}
+#start-btn:active {
+	box-shadow: none;
+	position: relative;
+	top: .2em;
+}
+
+
 .boards {
   display: flex;
   flex-direction: row;
@@ -19,6 +45,13 @@
   width: 3em;
 }
 
+.computer-cell:hover {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fd/Reticle.png?20061117192418');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  /* object-fit: cover; */
+}
 #ships {
   /* padding: 2em; */
   margin-top: 1em;
@@ -30,22 +63,36 @@
   max-width: 30em;
 }
 .ship-cell {
+
+  background-image: url('https://i.ibb.co/6R3ZRFy/5f4e2978a94da10004f2d6a7.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  
   border: 1px solid #003afa;
-  background-color: #6686f1;
+  /* background-color: #6686f1; */
   height: 3em;
   width: 3em;
 }
 
+
+
 .hit {
-  background-color: red;
+  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBD0UDed5QLSiiiKi5HQ0HWQJvHnU3pfsFKA&usqp=CAU');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .miss {
-  background-color: grey;
+  background-image: url('https://www.onlygfx.com/wp-content/uploads/2018/07/8-grunge-x-brush-stroke-4.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .disable-click {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .hide {

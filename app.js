@@ -1,6 +1,18 @@
 // utils functions
 const cloneObject = (object) => JSON.parse(JSON.stringify(object));
 
+
+
+const startGame = () => {
+  const boards = document.getElementById('boards');
+  const ships = document.getElementById('ships');
+  const startScreen = document.getElementById('start-screen');
+
+  boards.classList.remove('hide');
+  ships.classList.remove('hide');
+  startScreen.classList.add('hide');
+  startScreen.removeAttribute('id');
+}
 // board and ships template
 const initialGameBoardTemplate = [
   [[], [], [], [], [], [], [], [], [], []],
@@ -53,15 +65,17 @@ const renderGameBoard = (board, playerType) => {
       const hit = hasHittedShip(cell) ? "hit" : "";
       const miss = hasMissedHit(cell) ? "miss" : "";
       const shipCell = hasShip(cell) ? "ship-cell" : "";
+      const computerClass = isComputer ? "computer-cell" : "";
+
       return `
         <div 
           id="${rowIndex}${cellIndex}" 
-          class="cell ${hit} ${miss} ${shipCell}" 
-          onclick="onCellClick(this)"
+          class="cell ${hit} ${miss} ${shipCell} ${computerClass}" 
+          ${isComputer ? "onclick='onCellClick(this)'" : ""}
         >
-        ${rowIndex} ${cellIndex}
         </div>
-      `;
+        `;
+        // ${rowIndex} ${cellIndex}
     });
 
     // if player board allow drag and drop
@@ -85,7 +99,7 @@ const renderShips = (ships) => {
   for (let ship in ships) {
     let shipCells = "";
     for (let i = 1; i <= ships[ship].cells; i++) {
-      shipCells += `<div class="ship-cell">${i}</div>`;
+      shipCells += `<div class="ship-cell"></div>`; //${i}
     }
 
     shipsDOM += `<div class="ship" data-cells=${ships[ship].cells} data-name=${ships[ship].name} draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
@@ -167,9 +181,9 @@ const drop = (e) => {
 };
 
 const placeComputerShips = (computerBoard) => {
-  let randomCellIndex = Math.floor(Math.random() * 10);
-
+  
   const place = () => {
+    let randomCellIndex = Math.floor(Math.random() * 10);
     for (let i = 0; i < computerShips.length; i++) {
       const randomRowIndex = Math.floor(Math.random() * 10);
       const shipCells = computerShips[i].cells;
