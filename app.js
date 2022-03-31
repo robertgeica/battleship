@@ -113,36 +113,37 @@ const onCellClick = (cell) => {
 
 const placeShip = (ship, rowIndex, cellIndex) => {
   const { shipName, shipCells } = ship;
-  console.log(
-    `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
-  );
-  if (shipCells + cellIndex > 10) {
-    console.log("not enought space to place ship here");
-  } else {
-    let discard = false;
-    for (let i = cellIndex; i < shipCells + cellIndex; i++) {
-      const playerBoardCopy = cloneObject(playerBoard);
-      if (!playerBoardCopy[rowIndex][i].ship) {
-        playerBoardCopy[rowIndex][i] = { ship: true, hit: false };
-      } else {
-        discard = true;
-      }
+  const hasSpace = shipCells + cellIndex <= 10;
+  let hasShip = false;
 
-      if (!discard) {
-        playerBoard = playerBoardCopy;
-        playerShips = playerShips.filter((ship) => ship.name !== shipName);
-      }
+  if (!hasSpace) {
+    return console.log("not enought space to place ship here");
+  }
+
+  playerBoard[rowIndex].forEach((cell, index) => {
+    if (index >= cellIndex && index <= cellIndex + shipCells - 1) {
+      if (cell.ship) hasShip = true;
     }
+  });
 
-    // remove placed ship from player ships array
-    renderGameBoard(playerBoard, "player");
-    renderShips(playerShips);
+  for (let i = cellIndex; i < shipCells + cellIndex; i++) {
+    if (hasShip) return console.log("you already has a ship on these cells");
 
-    if (playerShips.length === 0) {
-      // if no more ships, start game
-      gameState.placeShips = false;
-      gameState.playerTurn = true;
-    }
+    playerBoard[rowIndex][i] = { ship: true, hit: false };
+    console.log(
+      `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
+    );
+    playerShips = playerShips.filter((ship) => ship.name !== shipName);
+  }
+
+  // remove placed ship from player ships array
+  renderGameBoard(playerBoard, "player");
+  renderShips(playerShips);
+
+  if (playerShips.length === 0) {
+    // if no more ships, start game
+    gameState.placeShips = false;
+    gameState.playerTurn = true;
   }
 };
 
