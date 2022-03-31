@@ -4,7 +4,10 @@
   align-items: center;
   margin: 2em;
 }
-#start-btn {
+#restart-btn {
+  margin: 2em auto;
+}
+#start-btn, #restart-btn {
   text-align: center;
   margin: 1em;
   padding: 10px;
@@ -14,10 +17,10 @@
   box-shadow: 0 0.2em #6b6b6b;
   cursor: pointer;
 }
-#start-btn:hover {
+#start-btn:hover, #restart-btn:hover {
   background-color: rgb(224, 224, 224);
 }
-#start-btn:active {
+#start-btn:active, #restart-btn:active {
 	box-shadow: none;
 	position: relative;
 	top: .2em;
@@ -27,6 +30,7 @@
 .boards {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
 }
 #player-board {
   /* border: 1px solid red; */
@@ -53,8 +57,7 @@
   /* object-fit: cover; */
 }
 #ships {
-  /* padding: 2em; */
-  margin-top: 1em;
+  margin: 1em;
 }
 
 .ship {
