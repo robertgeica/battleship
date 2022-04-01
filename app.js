@@ -1,18 +1,18 @@
 // utils functions
 const cloneObject = (object) => JSON.parse(JSON.stringify(object));
 
-
-
 const startGame = () => {
-  const boards = document.getElementById('boards');
-  const ships = document.getElementById('ships');
-  const startScreen = document.getElementById('start-screen');
+  const boards = document.getElementById("boards");
+  const ships = document.getElementById("ships");
+  const startScreen = document.getElementById("start-screen");
+  const shipAlign = document.getElementById("ship-align");
 
-  boards.classList.remove('hide');
-  ships.classList.remove('hide');
-  startScreen.classList.add('hide');
-  startScreen.removeAttribute('id');
-}
+  boards.classList.remove("hide");
+  ships.classList.remove("hide");
+  startScreen.classList.add("hide");
+  startScreen.removeAttribute("id");
+  shipAlign.removeAttribute("class");
+};
 // board and ships template
 const initialGameBoardTemplate = [
   [[], [], [], [], [], [], [], [], [], []],
@@ -49,6 +49,8 @@ let playerShips = cloneObject(initialShipsTemplate);
 let computerBoard = cloneObject(initialGameBoardTemplate);
 let computerShips = cloneObject(initialShipsTemplate);
 
+let isVerticalShip = false;
+
 const renderGameBoard = (board, playerType) => {
   const boardDOM = document.getElementById(`${playerType}-board`);
   boardDOM.innerHTML = "";
@@ -75,7 +77,7 @@ const renderGameBoard = (board, playerType) => {
         >
         </div>
         `;
-        // ${rowIndex} ${cellIndex}
+      // ${rowIndex} ${cellIndex}
     });
 
     // if player board allow drag and drop
@@ -90,6 +92,7 @@ const renderGameBoard = (board, playerType) => {
 };
 renderGameBoard(playerBoard, "player");
 
+const shipAlign = () => (isVerticalShip = !isVerticalShip);
 const renderShips = (ships) => {
   const shipsContainerDOM = document.getElementById("ships");
   shipsContainerDOM.innerHTML = "";
@@ -134,20 +137,40 @@ const placeShip = (ship, rowIndex, cellIndex) => {
     return console.log("not enought space to place ship here");
   }
 
-  playerBoard[rowIndex].forEach((cell, index) => {
-    if (index >= cellIndex && index <= cellIndex + shipCells - 1) {
-      if (cell.ship) hasShip = true;
+  if (isVerticalShip) {
+    let newRowIndex = rowIndex;
+
+    playerBoard.forEach((row, index) => {
+      if (index >= newRowIndex && index <= rowIndex + shipCells - 1) {
+        newRowIndex += 1;
+        if (playerBoard[index][cellIndex].ship) hasShip = true;
+      }
+    });
+
+    for (let i = rowIndex; i < shipCells + rowIndex; i++) {
+      if (hasShip) return console.log("you already has a ship on these cells");
+      playerBoard[i][cellIndex] = { ship: true, hit: false }; //[i][cellIndex]
+      console.log(
+        `place ${shipName} with ${shipCells} cells at cell ${cellIndex} at row ${rowIndex}`
+      );
+      playerShips = playerShips.filter((ship) => ship.name !== shipName);
     }
-  });
+  } else {
+    playerBoard[rowIndex].forEach((cell, index) => {
+      if (index >= cellIndex && index <= cellIndex + shipCells - 1) {
+        if (cell.ship) hasShip = true;
+      }
+    });
 
-  for (let i = cellIndex; i < shipCells + cellIndex; i++) {
-    if (hasShip) return console.log("you already has a ship on these cells");
+    for (let i = cellIndex; i < shipCells + cellIndex; i++) {
+      if (hasShip) return console.log("you already has a ship on these cells");
 
-    playerBoard[rowIndex][i] = { ship: true, hit: false };
-    console.log(
-      `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
-    );
-    playerShips = playerShips.filter((ship) => ship.name !== shipName);
+      playerBoard[rowIndex][i] = { ship: true, hit: false }; //[i][cellIndex]
+      console.log(
+        `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
+      );
+      playerShips = playerShips.filter((ship) => ship.name !== shipName);
+    }
   }
 
   // remove placed ship from player ships array
@@ -181,7 +204,6 @@ const drop = (e) => {
 };
 
 const placeComputerShips = (computerBoard) => {
-  
   const place = () => {
     let randomCellIndex = Math.floor(Math.random() * 10);
     for (let i = 0; i < computerShips.length; i++) {
@@ -279,9 +301,10 @@ const checkGameOver = () => {
 };
 
 const restartGame = () => {
-  console.log("restart");
   const restartBtn = document.getElementById("restart-btn");
   restartBtn.classList.remove("hide");
   restartBtn.classList.add("show");
   restartBtn.addEventListener("click", () => window.location.reload());
 };
+
+
