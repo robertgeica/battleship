@@ -204,6 +204,49 @@ const drop = (e) => {
 };
 
 const placeComputerShips = (computerBoard) => {
+  const placeVertical = () => {
+    for (let i = 0; i < computerShips.length; i++) {
+      let randomRowIndex = Math.floor(Math.random() * 10);
+      let randomCellIndex = Math.floor(Math.random() * 10);
+      const shipCells = computerShips[i].cells;
+
+      while (shipCells + randomRowIndex > 10) {
+        randomRowIndex = Math.floor(Math.random() * 10);
+      }
+      let hasSpace = false;
+      let hasShip = false;
+      computerBoard.forEach((row, index) => {
+        if (
+          index >= randomRowIndex &&
+          index <= randomRowIndex + shipCells - 1
+        ) {
+          console.log(
+            `Ship cells: ${shipCells}.\nRow index: ${randomRowIndex}.\nCell index: ${randomCellIndex}.\nIndex: ${index}`
+          );
+
+          hasSpace = shipCells <= shipCells + randomRowIndex;
+
+          if (row[randomCellIndex].ship) hasShip = true;
+        }
+      });
+
+      if (hasSpace && !hasShip) {
+        console.log(hasSpace, hasShip);
+
+        for (let j = randomRowIndex; j < shipCells + randomRowIndex; j++) {
+          computerBoard[j][randomCellIndex] = {
+            ship: true,
+            hit: false,
+          };
+        }
+        computerShips = computerShips.filter(
+          (ship) => ship.name !== computerShips[i].name
+        );
+        ships = ships - 1;
+      }
+    }
+  };
+
   const place = () => {
     let randomCellIndex = Math.floor(Math.random() * 10);
     for (let i = 0; i < computerShips.length; i++) {
@@ -245,7 +288,9 @@ const placeComputerShips = (computerBoard) => {
   };
 
   while (computerShips.length !== 0) {
-    place();
+    const vertical = Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
+
+    vertical ? placeVertical() : place();
   }
 
   renderGameBoard(computerBoard, "computer");
