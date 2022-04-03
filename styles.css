@@ -109,6 +109,81 @@
   transform: rotate(90deg);
 }
 
+
+#random-btn {
+  margin: 1em;
+  text-align: center;
+  color: #fff;
+  border-radius:28px;
+	padding: 5px 20px;
+  cursor: pointer;
+  outline: none;
+  background-color:#2362cf;
+  border:1px solid #1e58bd;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #194da8;
+}
+#random-btn:hover {
+	background-color:#256ae1;
+}
+#random-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.ship-align {
+  display: flex;
+  align-items: center;
+}
+
+.ship-align-switch {
+  position: relative;
+  width: 55px;
+  height: 28px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #c9c8c8;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #fff;
+  transition: .4s;
+}
+
+#vertical:checked + .slider {
+  background-color: #194da8;
+}
+
+#vertical:focus + .slider {
+  box-shadow: 0 0 1px #194da8;
+}
+
+#vertical:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 /* notification */
 .visible-animation {
   animation: move-in 0.2s ease-in forwards, move-out 0.2s 2s ease-out forwards;
@@ -135,6 +210,12 @@
   from { left: 10px; }
   to   { left: -200px; }
 }
+
+
+
+
+
+
 
 
 

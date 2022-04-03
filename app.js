@@ -11,7 +11,8 @@ const startGame = () => {
   ships.classList.remove("hide");
   startScreen.classList.add("hide");
   startScreen.removeAttribute("id");
-  shipAlign.removeAttribute("class");
+  shipAlign.classList.remove("hide");
+  shipAlign.classList.add("ship-align");
 };
 // board and ships template
 const initialGameBoardTemplate = [
@@ -372,7 +373,15 @@ const restartGame = () => {
   restartBtn.addEventListener("click", () => window.location.reload());
 };
 
-
+/*
+  TODO:
+    ! BUG: randomly align for user, somtimes adds new cells
+    - create more complex computer fire logic
+    x add ui alerts instead of clgs
+    - fix ui lacks
+    - refactor code
+      - create one function to place both user and computer ships
+*/
 
 // notifications
 const notificationContainer = document.getElementById("notification-container");
