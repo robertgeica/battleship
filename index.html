@@ -17,10 +17,10 @@
   </div>
 
   <div id="ship-align" class="hide">
-    <input type="checkbox" id="vertical" name="vertical" onclick="shipAlign()">
+    <input type="checkbox" id="vertical" name="vertical" onclick="shipAlign()" />
     <label for="vertical">Vertical</label>
   </div>
-  <div class="hide" id="ships"> </div>
+  <div class="hide" id="ships"></div>
   <button onclick="randomlyPlace()">random place ships</button>
 
   <div id="start-screen" onclick="startGame()">
@@ -28,6 +28,10 @@
       width="700" height="450" />
 
     <button id="start-btn">Start game</button>
+  </div>
+
+  <div id="notification-container">
+    <p id="notification-message"></p>
   </div>
 
   <script type="text/javascript" src="./app.js"></script>

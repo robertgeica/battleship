@@ -112,12 +112,14 @@ const renderShips = (ships) => {
 renderShips(playerShips);
 
 const onCellClick = (cell) => {
-  if (!gameState.playerTurn) return console.log("wait for your turn");
+  if (gameState.placeShips) return alertBox("Place your ships first");
+  if (!gameState.playerTurn) return alertBox("Wait for your turn.");
   const rowIndex = cell.id[0];
   const cellIndex = cell.id[1];
   const clickedCell = computerBoard[rowIndex][cellIndex];
 
-  if(clickedCell.miss || clickedCell.hit) return console.log('already clicked this cell');
+  if (clickedCell.miss || clickedCell.hit)
+    return alertBox("You already hit this cell.");
   if (clickedCell.ship) {
     computerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
@@ -132,14 +134,15 @@ const onCellClick = (cell) => {
 const placeShip = (ship, rowIndex, cellIndex, isRandomly) => {
   const { shipName, shipCells } = ship;
   const isVertical = isRandomly || isVerticalShip;
-  const hasSpace = isVertical ? shipCells + rowIndex <= 10 : shipCells + cellIndex <= 10;
+  const hasSpace = isVertical
+    ? shipCells + rowIndex <= 10
+    : shipCells + cellIndex <= 10;
   let hasShip = false;
   if (!hasSpace) {
-    return console.log("not enought space to place ship here");
+    return alertBox("Not enought space to place ship here.");
   }
 
-  if(typeof isRandomly !== 'undefined') {
-    console.log('not undef');
+  if (typeof isRandomly !== "undefined") {
     isVerticalShip = isRandomly;
   }
 
@@ -154,11 +157,11 @@ const placeShip = (ship, rowIndex, cellIndex, isRandomly) => {
     });
 
     for (let i = rowIndex; i < shipCells + rowIndex; i++) {
-      if (hasShip) return console.log("you already has a ship on these cells");
+      if (hasShip) return alertBox("A ship has already been placed here.");
       playerBoard[i][cellIndex] = { ship: true, hit: false }; //[i][cellIndex]
-      console.log(
-        `place ${shipName} with ${shipCells} cells at cell ${cellIndex} at row ${rowIndex}`
-      );
+      // console.log(
+      //   `place ${shipName} with ${shipCells} cells at cell ${cellIndex} at row ${rowIndex}`
+      // );
       playerShips = playerShips.filter((ship) => ship.name !== shipName);
     }
   } else {
@@ -169,12 +172,12 @@ const placeShip = (ship, rowIndex, cellIndex, isRandomly) => {
     });
 
     for (let i = cellIndex; i < shipCells + cellIndex; i++) {
-      if (hasShip) return console.log("you already has a ship on these cells");
+      if (hasShip) return alertBox("A ship has already been placed here.");
 
       playerBoard[rowIndex][i] = { ship: true, hit: false }; //[i][cellIndex]
-      console.log(
-        `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
-      );
+      // console.log(
+      //   `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
+      // );
       playerShips = playerShips.filter((ship) => ship.name !== shipName);
     }
   }
@@ -210,16 +213,15 @@ const drop = (e) => {
 };
 
 const randomlyPlace = () => {
-  playerShips.forEach(ship => {
-    const randomBoolean = Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
-    console.log(randomBoolean)
+  playerShips.forEach((ship) => {
+    const randomBoolean =
+      Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
     const { name, cells } = ship;
     const row = Math.floor(Math.random() * 10);
     const cell = Math.floor(Math.random() * 10);
-    placeShip({shipName: name, shipCells: cells}, row, cell, randomBoolean);
+    placeShip({ shipName: name, shipCells: cells }, row, cell, randomBoolean);
   });
-  
-}
+};
 const placeComputerShips = (computerBoard) => {
   const placeVertical = () => {
     for (let i = 0; i < computerShips.length; i++) {
@@ -237,9 +239,9 @@ const placeComputerShips = (computerBoard) => {
           index >= randomRowIndex &&
           index <= randomRowIndex + shipCells - 1
         ) {
-          console.log(
-            `Ship cells: ${shipCells}.\nRow index: ${randomRowIndex}.\nCell index: ${randomCellIndex}.\nIndex: ${index}`
-          );
+          // console.log(
+          //   `Ship cells: ${shipCells}.\nRow index: ${randomRowIndex}.\nCell index: ${randomCellIndex}.\nIndex: ${index}`
+          // );
 
           hasSpace = shipCells <= shipCells + randomRowIndex;
 
@@ -248,7 +250,6 @@ const placeComputerShips = (computerBoard) => {
       });
 
       if (hasSpace && !hasShip) {
-        console.log(hasSpace, hasShip);
 
         for (let j = randomRowIndex; j < shipCells + randomRowIndex; j++) {
           computerBoard[j][randomCellIndex] = {
@@ -320,7 +321,7 @@ const computerHit = () => {
   const cellIndex = Math.floor(Math.random() * 10);
   const hittedCell = playerBoard[rowIndex][cellIndex];
 
-  if(hittedCell.miss || hittedCell.hit) return computerHit();
+  if (hittedCell.miss || hittedCell.hit) return computerHit();
 
   if (hittedCell.ship) {
     playerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
@@ -330,7 +331,6 @@ const computerHit = () => {
       miss: true,
     };
   }
-
   gameState.playerTurn = true;
   renderGameBoard(playerBoard, "player");
   checkGameOver();
@@ -356,11 +356,11 @@ const checkGameOver = () => {
     document.getElementById("computer-board").classList = "disable-click";
   }
   if (playerWon) {
-    console.log("player won");
+    alertBox("Player won!");
     restartGame();
   }
   if (computerWon) {
-    console.log("computer won");
+    console.log("Computer won!");
     restartGame();
   }
 };
@@ -373,3 +373,15 @@ const restartGame = () => {
 };
 
 
+
+// notifications
+const notificationContainer = document.getElementById("notification-container");
+const notificationMessage = document.getElementById('notification-message');
+const alertBox = (message) => {
+  notificationContainer.classList.add("visible-animation");
+  notificationMessage.innerHTML = `${message}.`;
+
+  setTimeout(() => {
+    notificationContainer.classList.remove("visible-animation");
+  }, 3000);
+};
