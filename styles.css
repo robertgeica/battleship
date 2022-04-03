@@ -104,3 +104,7 @@
 .show {
   display: block;
 }
+
+.rotate {
+  transform: rotate(90deg);
+}

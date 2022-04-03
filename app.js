@@ -117,6 +117,7 @@ const onCellClick = (cell) => {
   const cellIndex = cell.id[1];
   const clickedCell = computerBoard[rowIndex][cellIndex];
 
+  if(clickedCell.miss || clickedCell.hit) return console.log('already clicked this cell');
   if (clickedCell.ship) {
     computerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
@@ -318,6 +319,9 @@ const computerHit = () => {
   const rowIndex = Math.floor(Math.random() * 10);
   const cellIndex = Math.floor(Math.random() * 10);
   const hittedCell = playerBoard[rowIndex][cellIndex];
+
+  if(hittedCell.miss || hittedCell.hit) return computerHit();
+
   if (hittedCell.ship) {
     playerBoard[rowIndex][cellIndex] = { ship: true, hit: true };
   } else {
@@ -368,14 +372,4 @@ const restartGame = () => {
   restartBtn.addEventListener("click", () => window.location.reload());
 };
 
-/*
-  TODO:
-    x add posibility to place ships vertical
-      x user
-      x computer
-    - create function to randomly place user ships
-    - add ui alerts instead of clgs
-    - create more complex computer fire logic
-    - refactor code
-      - create one function to place both user and computer ships
-*/
+
