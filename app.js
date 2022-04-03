@@ -128,13 +128,18 @@ const onCellClick = (cell) => {
   computerHit();
 };
 
-const placeShip = (ship, rowIndex, cellIndex) => {
+const placeShip = (ship, rowIndex, cellIndex, isRandomly) => {
   const { shipName, shipCells } = ship;
-  const hasSpace = shipCells + cellIndex <= 10;
+  const isVertical = isRandomly || isVerticalShip;
+  const hasSpace = isVertical ? shipCells + rowIndex <= 10 : shipCells + cellIndex <= 10;
   let hasShip = false;
-
   if (!hasSpace) {
     return console.log("not enought space to place ship here");
+  }
+
+  if(typeof isRandomly !== 'undefined') {
+    console.log('not undef');
+    isVerticalShip = isRandomly;
   }
 
   if (isVerticalShip) {
@@ -203,6 +208,17 @@ const drop = (e) => {
   placeShip({ shipCells, shipName }, row, cell);
 };
 
+const randomlyPlace = () => {
+  playerShips.forEach(ship => {
+    const randomBoolean = Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
+    console.log(randomBoolean)
+    const { name, cells } = ship;
+    const row = Math.floor(Math.random() * 10);
+    const cell = Math.floor(Math.random() * 10);
+    placeShip({shipName: name, shipCells: cells}, row, cell, randomBoolean);
+  });
+  
+}
 const placeComputerShips = (computerBoard) => {
   const placeVertical = () => {
     for (let i = 0; i < computerShips.length; i++) {
@@ -352,4 +368,14 @@ const restartGame = () => {
   restartBtn.addEventListener("click", () => window.location.reload());
 };
 
-
+/*
+  TODO:
+    x add posibility to place ships vertical
+      x user
+      x computer
+    - create function to randomly place user ships
+    - add ui alerts instead of clgs
+    - create more complex computer fire logic
+    - refactor code
+      - create one function to place both user and computer ships
+*/
