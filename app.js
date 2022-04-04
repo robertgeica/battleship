@@ -1,19 +1,7 @@
-// utils functions
+// Utils functions
 const cloneObject = (object) => JSON.parse(JSON.stringify(object));
+const getRandomNum = () => Math.floor(Math.random() * 10);
 
-const startGame = () => {
-  const boards = document.getElementById("boards");
-  const ships = document.getElementById("ships");
-  const startScreen = document.getElementById("start-screen");
-  const shipAlign = document.getElementById("ship-align");
-
-  boards.classList.remove("hide");
-  ships.classList.remove("hide");
-  startScreen.classList.add("hide");
-  startScreen.removeAttribute("id");
-  shipAlign.classList.remove("hide");
-  shipAlign.classList.add("ship-align");
-};
 // board and ships template
 const initialGameBoardTemplate = [
   [[], [], [], [], [], [], [], [], [], []],
@@ -40,6 +28,20 @@ const initialShipsTemplate = [
 const gameState = {
   placeShips: true,
   playerTurn: false,
+};
+
+const moveToGameScreen = () => {
+  const boards = document.getElementById("boards");
+  const ships = document.getElementById("ships");
+  const startScreen = document.getElementById("start-screen");
+  const shipAlign = document.getElementById("ship-align");
+
+  boards.classList.remove("hide");
+  ships.classList.remove("hide");
+  startScreen.classList.add("hide");
+  startScreen.removeAttribute("id");
+  shipAlign.classList.remove("hide");
+  shipAlign.classList.add("ship-align");
 };
 
 // init player board and ships
@@ -127,7 +129,11 @@ const renderShips = (ships) => {
       shipCells += `<div class="ship-cell"></div>`; //${i}
     }
 
-    shipsDOM += `<div class="ship ${isVerticalShip ? "o" : "v"}" data-cells=${ships[ship].cells} data-name=${ships[ship].name} draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
+    shipsDOM += `<div class="ship ${isVerticalShip ? "o" : "v"}" data-cells=${
+      ships[ship].cells
+    } data-name=${
+      ships[ship].name
+    } draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
   }
   shipsContainerDOM.innerHTML += shipsContainerDOM.innerHTML + shipsDOM;
 };
@@ -239,22 +245,22 @@ const drop = (e) => {
 const randomlyPlace = () => {
   playerShips.forEach((ship) => {
     const randomBoolean =
-      Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
+    getRandomNum() % 2 === 0 ? true : false;
     const { name, cells } = ship;
-    const row = Math.floor(Math.random() * 10);
-    const cell = Math.floor(Math.random() * 10);
+    const row = getRandomNum();
+    const cell = getRandomNum();
     placeShip({ shipName: name, shipCells: cells }, row, cell, randomBoolean);
   });
 };
 const placeComputerShips = (computerBoard) => {
   const placeVertical = () => {
     for (let i = 0; i < computerShips.length; i++) {
-      let randomRowIndex = Math.floor(Math.random() * 10);
-      let randomCellIndex = Math.floor(Math.random() * 10);
+      let randomRowIndex = getRandomNum();
+      let randomCellIndex = getRandomNum();
       const shipCells = computerShips[i].cells;
 
       while (shipCells + randomRowIndex > 10) {
-        randomRowIndex = Math.floor(Math.random() * 10);
+        randomRowIndex = getRandomNum();
       }
       let hasSpace = false;
       let hasShip = false;
@@ -289,13 +295,13 @@ const placeComputerShips = (computerBoard) => {
   };
 
   const place = () => {
-    let randomCellIndex = Math.floor(Math.random() * 10);
+    let randomCellIndex = getRandomNum();
     for (let i = 0; i < computerShips.length; i++) {
-      const randomRowIndex = Math.floor(Math.random() * 10);
+      const randomRowIndex = getRandomNum();
       const shipCells = computerShips[i].cells;
 
       while (shipCells + randomCellIndex > 10) {
-        randomCellIndex = Math.floor(Math.random() * 10);
+        randomCellIndex = getRandomNum();
       }
 
       let hasSpace = false;
@@ -329,7 +335,7 @@ const placeComputerShips = (computerBoard) => {
   };
 
   while (computerShips.length !== 0) {
-    const vertical = Math.floor(Math.random() * 10) % 2 === 0 ? true : false;
+    const vertical = getRandomNum() % 2 === 0 ? true : false;
 
     vertical ? placeVertical() : place();
   }
@@ -340,8 +346,8 @@ const placeComputerShips = (computerBoard) => {
 placeComputerShips(computerBoard);
 
 const computerHit = () => {
-  const rowIndex = Math.floor(Math.random() * 10);
-  const cellIndex = Math.floor(Math.random() * 10);
+  const rowIndex = getRandomNum();
+  const cellIndex = getRandomNum();
   const hittedCell = playerBoard[rowIndex][cellIndex];
 
   if (hittedCell.miss || hittedCell.hit) return computerHit();
