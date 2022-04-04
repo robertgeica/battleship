@@ -11,7 +11,7 @@
 #restart-btn {
   margin: 2em auto;
 }
-#start-btn,
+#game-screen-btn,
 #restart-btn {
   text-align: center;
   margin: 1em;
@@ -22,11 +22,11 @@
   box-shadow: 0 0.2em #6b6b6b;
   cursor: pointer;
 }
-#start-btn:hover,
+#game-screen-btn:hover,
 #restart-btn:hover {
   background-color: rgb(224, 224, 224);
 }
-#start-btn:active,
+#game-screen-btn:active,
 #restart-btn:active {
   box-shadow: none;
   position: relative;
@@ -39,7 +39,6 @@
   justify-content: space-around;
 }
 #player-board {
-  /* border: 1px solid red; */
   margin-right: 1em;
 }
 
@@ -60,18 +59,17 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  /* object-fit: cover; */
 }
 #ships {
   margin: 1em;
 }
 
-.v { 
+.vertical {
   display: flex;
   flex-direction: row;
 }
 
-.o {
+.orizontal {
   display: flex;
   flex-direction: column;
 }
@@ -86,9 +84,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-
   border: 1px solid #003afa;
-  /* background-color: #6686f1; */
   height: 3em;
   width: 3em;
 }
@@ -118,11 +114,7 @@
   display: block;
 }
 
-.rotate {
-  transform: rotate(90deg);
-}
-
-#random-btn {
+#place-ships-randomly-btn {
   margin: 1em;
   text-align: center;
   color: #fff;
@@ -136,10 +128,10 @@
   text-shadow: 0px 1px 0px #194da8;
   font-size: 12px;
 }
-#random-btn:hover {
+#place-ships-randomly-btn:hover {
   background-color: #256ae1;
 }
-#random-btn:active {
+#place-ships-randomly-btn:active {
   position: relative;
   top: 1px;
 }
@@ -201,6 +193,7 @@
   font-size: 12px;
   margin: 0.5em;
 }
+
 /* notification */
 .visible-animation {
   animation: move-in 0.2s ease-in forwards, move-out 0.2s 2s ease-out forwards;
