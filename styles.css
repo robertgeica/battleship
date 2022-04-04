@@ -1,3 +1,7 @@
+* {
+  font-family: "Courier New", Courier, monospace;
+}
+
 #start-screen {
   display: flex;
   flex-direction: column;
@@ -7,7 +11,8 @@
 #restart-btn {
   margin: 2em auto;
 }
-#start-btn, #restart-btn {
+#start-btn,
+#restart-btn {
   text-align: center;
   margin: 1em;
   padding: 10px;
@@ -17,15 +22,16 @@
   box-shadow: 0 0.2em #6b6b6b;
   cursor: pointer;
 }
-#start-btn:hover, #restart-btn:hover {
+#start-btn:hover,
+#restart-btn:hover {
   background-color: rgb(224, 224, 224);
 }
-#start-btn:active, #restart-btn:active {
-	box-shadow: none;
-	position: relative;
-	top: .2em;
+#start-btn:active,
+#restart-btn:active {
+  box-shadow: none;
+  position: relative;
+  top: 0.2em;
 }
-
 
 .boards {
   display: flex;
@@ -50,7 +56,7 @@
 }
 
 .computer-cell:hover {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/fd/Reticle.png?20061117192418');
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/f/fd/Reticle.png?20061117192418");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -60,35 +66,42 @@
   margin: 1em;
 }
 
-.ship {
+.v { 
   display: flex;
   flex-direction: row;
+}
+
+.o {
+  display: flex;
+  flex-direction: column;
+}
+
+.ship {
+  display: flex;
   max-width: 30em;
+  margin: 8px;
 }
 .ship-cell {
-
-  background-image: url('https://i.ibb.co/6R3ZRFy/5f4e2978a94da10004f2d6a7.png');
+  background-image: url("https://i.ibb.co/6R3ZRFy/5f4e2978a94da10004f2d6a7.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  
+
   border: 1px solid #003afa;
   /* background-color: #6686f1; */
   height: 3em;
   width: 3em;
 }
 
-
-
 .hit {
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBD0UDed5QLSiiiKi5HQ0HWQJvHnU3pfsFKA&usqp=CAU');
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBD0UDed5QLSiiiKi5HQ0HWQJvHnU3pfsFKA&usqp=CAU");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 }
 
 .miss {
-  background-image: url('https://www.onlygfx.com/wp-content/uploads/2018/07/8-grunge-x-brush-stroke-4.png');
+  background-image: url("https://www.onlygfx.com/wp-content/uploads/2018/07/8-grunge-x-brush-stroke-4.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -109,26 +122,26 @@
   transform: rotate(90deg);
 }
 
-
 #random-btn {
   margin: 1em;
   text-align: center;
   color: #fff;
-  border-radius:28px;
-	padding: 5px 20px;
+  border-radius: 28px;
+  padding: 6px 20px;
   cursor: pointer;
   outline: none;
-  background-color:#2362cf;
-  border:1px solid #1e58bd;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #194da8;
+  background-color: #2362cf;
+  border: 1px solid #1e58bd;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #194da8;
+  font-size: 12px;
 }
 #random-btn:hover {
-	background-color:#256ae1;
+  background-color: #256ae1;
 }
 #random-btn:active {
-	position:relative;
-	top:1px;
+  position: relative;
+  top: 1px;
 }
 
 .ship-align {
@@ -150,7 +163,7 @@
   right: 0;
   bottom: 0;
   background-color: #c9c8c8;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -161,7 +174,7 @@
   left: 4px;
   bottom: 4px;
   background-color: #fff;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 #vertical:checked + .slider {
@@ -184,6 +197,10 @@
   border-radius: 50%;
 }
 
+.align-label {
+  font-size: 12px;
+  margin: 0.5em;
+}
 /* notification */
 .visible-animation {
   animation: move-in 0.2s ease-in forwards, move-out 0.2s 2s ease-out forwards;
@@ -195,28 +212,32 @@
   background: #194da8;
   color: white;
   border-radius: 3px;
-  text-align: center;
+  display: flex;
+  align-items: center;
   position: fixed;
   bottom: 2vh;
   left: -200px;
+  font-size: 12px;
 }
 
 @keyframes move-in {
-  from { left: -200px; }
-  to   { left: 10px; }
+  from {
+    left: -200px;
+  }
+  to {
+    left: 10px;
+  }
 }
 
 @keyframes move-out {
-  from { left: 10px; }
-  to   { left: -200px; }
+  from {
+    left: 10px;
+  }
+  to {
+    left: -200px;
+  }
 }
 
-
-
-
-
-
-
-
-
-
+#notification-message {
+  padding: 0 10px;
+}

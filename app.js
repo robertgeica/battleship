@@ -93,9 +93,30 @@ const renderGameBoard = (board, playerType) => {
 };
 renderGameBoard(playerBoard, "player");
 
-const shipAlign = () => (isVerticalShip = !isVerticalShip);
+const shipAlign = () => {
+  const shipsContainerDOM = document.getElementById("ships");
+  const shipDOM = document.querySelectorAll(".ship");
+
+  isVerticalShip = !isVerticalShip;
+  if (isVerticalShip) {
+    shipsContainerDOM.classList.add("v");
+    shipsContainerDOM.classList.remove("o");
+    shipDOM.forEach((ship) => {
+      ship.classList.add("o");
+      ship.classList.remove("v");
+    });
+  } else {
+    shipsContainerDOM.classList.add("o");
+    shipsContainerDOM.classList.remove("v");
+    shipDOM.forEach((ship) => {
+      ship.classList.add("v");
+      ship.classList.remove("o");
+    });
+  }
+};
 const renderShips = (ships) => {
   const shipsContainerDOM = document.getElementById("ships");
+
   shipsContainerDOM.innerHTML = "";
 
   let shipsDOM = "";
@@ -106,7 +127,7 @@ const renderShips = (ships) => {
       shipCells += `<div class="ship-cell"></div>`; //${i}
     }
 
-    shipsDOM += `<div class="ship" data-cells=${ships[ship].cells} data-name=${ships[ship].name} draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
+    shipsDOM += `<div class="ship ${isVerticalShip ? "o" : "v"}" data-cells=${ships[ship].cells} data-name=${ships[ship].name} draggable="true" ondragstart="drag(event)">${shipCells}</div>`;
   }
   shipsContainerDOM.innerHTML += shipsContainerDOM.innerHTML + shipsDOM;
 };
@@ -173,12 +194,14 @@ const placeShip = (ship, rowIndex, cellIndex, isRandomly) => {
     });
 
     for (let i = cellIndex; i < shipCells + cellIndex; i++) {
+      // i < shipCells + cellIndex
       if (hasShip) return alertBox("A ship has already been placed here.");
 
-      playerBoard[rowIndex][i] = { ship: true, hit: false }; //[i][cellIndex]
-      // console.log(
-      //   `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`
-      // );
+      playerBoard[rowIndex][i] = { ship: true, hit: false };
+      console.log(
+        `place ${shipName} with ${shipCells} cells at row ${rowIndex} at cell ${cellIndex}`,
+        hasSpace
+      );
       playerShips = playerShips.filter((ship) => ship.name !== shipName);
     }
   }
@@ -251,7 +274,6 @@ const placeComputerShips = (computerBoard) => {
       });
 
       if (hasSpace && !hasShip) {
-
         for (let j = randomRowIndex; j < shipCells + randomRowIndex; j++) {
           computerBoard[j][randomCellIndex] = {
             ship: true,
@@ -373,19 +395,11 @@ const restartGame = () => {
   restartBtn.addEventListener("click", () => window.location.reload());
 };
 
-/*
-  TODO:
-    ! BUG: randomly align for user, somtimes adds new cells
-    - create more complex computer fire logic
-    x add ui alerts instead of clgs
-    - fix ui lacks
-    - refactor code
-      - create one function to place both user and computer ships
-*/
+
 
 // notifications
 const notificationContainer = document.getElementById("notification-container");
-const notificationMessage = document.getElementById('notification-message');
+const notificationMessage = document.getElementById("notification-message");
 const alertBox = (message) => {
   notificationContainer.classList.add("visible-animation");
   notificationMessage.innerHTML = `${message}.`;
