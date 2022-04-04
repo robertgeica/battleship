@@ -30,6 +30,7 @@ const GAME_STATE = {
   placeShips: true,
   playerTurn: false,
   isVerticalShip: false,
+  round: 0,
 };
 
 // init player board and ships
@@ -189,7 +190,9 @@ const placeShipOnBoard = (ship, rowIndex, cellIndex, isRandomly) => {
   }
 };
 
-const placeShipsRandomlyBtn = document.getElementById( "place-ships-randomly-btn");
+const placeShipsRandomlyBtn = document.getElementById(
+  "place-ships-randomly-btn"
+);
 const placeShipOnBoardRandomly = () => {
   while (playerShips.length > 0) {
     playerShips.forEach((ship) => {
@@ -251,7 +254,6 @@ const onCellClick = (cell) => {
 
 // computer place ships and cell hit/click
 const placeComputerShips = (computerBoard) => {
-
   const placeShipVertical = () => {
     for (let i = 0; i < computerShips.length; i++) {
       let randomRowIndex = getRandomNum();
@@ -268,7 +270,6 @@ const placeComputerShips = (computerBoard) => {
           index >= randomRowIndex &&
           index <= randomRowIndex + shipCells - 1
         ) {
-
           hasSpace = shipCells <= shipCells + randomRowIndex;
 
           if (row[randomCellIndex].ship) hasShip = true;
@@ -358,33 +359,32 @@ const computerHit = () => {
   checkGameOver();
 };
 
-
 const checkGameOver = () => {
-  let totalShipCells = 17;
-  let computerHit = 0;
-  let playerHit = 0;
-
-  computerBoard.forEach((row) =>
-    row.forEach((cell) => cell.hit && playerHit++)
+  GAME_STATE.round = GAME_STATE.round + 1;
+  let totalShipCells = 0;
+  Object.values(INITIAL_SHIPS_TEMPLATE).forEach(
+    (ship) => (totalShipCells += ship.cells)
   );
-  playerBoard.forEach((row) =>
-    row.forEach((cell) => cell.hit && computerHit++)
-  );
+  if (GAME_STATE.round >= totalShipCells) {
+    let computerHit = 0;
+    let playerHit = 0;
 
-  const playerWon = playerHit === totalShipCells;
-  const computerWon = computerHit === totalShipCells;
+    computerBoard.forEach((row) =>
+      row.forEach((cell) => cell.hit && playerHit++)
+    );
+    playerBoard.forEach((row) =>
+      row.forEach((cell) => cell.hit && computerHit++)
+    );
 
-  if (playerWon || computerWon) {
-    document.getElementById("player-board").classList = "disable-click";
-    document.getElementById("computer-board").classList = "disable-click";
-  }
-  if (playerWon) {
-    alertBox("Player won!");
-    restartGame();
-  }
-  if (computerWon) {
-    alertBox("Computer won!");
-    restartGame();
+    const playerWon = playerHit === totalShipCells;
+    const computerWon = computerHit === totalShipCells;
+
+    if (playerWon || computerWon) {
+      document.getElementById("player-board").classList = "disable-click";
+      document.getElementById("computer-board").classList = "disable-click";
+      alertBox(`${playerWon ? "Player won!" : "Computer won"}`);
+      restartGame();
+    }
   }
 };
 
